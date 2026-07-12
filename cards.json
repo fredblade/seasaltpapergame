@@ -1,0 +1,214 @@
+{
+    "game": "Sea Salt & Paper",
+    "totalCards": 58,
+    "cards": [
+        {
+            "name": "Crab",
+            "type": "duo",
+            "quantity": 9,
+            "points": 1,
+            "effect": "Take 1 card from either discard pile",
+            "emoji": "🦀",
+            "color": "orange-red",
+            "category": "Duo"
+        },
+        {
+            "name": "Boat",
+            "type": "duo",
+            "quantity": 8,
+            "points": 1,
+            "effect": "Take an extra turn immediately",
+            "emoji": "⛵",
+            "color": "blue",
+            "category": "Duo"
+        },
+        {
+            "name": "Fish",
+            "type": "duo",
+            "quantity": 7,
+            "points": 1,
+            "effect": "Draw the top card from the deck",
+            "emoji": "🐟",
+            "color": "blue",
+            "category": "Duo"
+        },
+        {
+            "name": "Swimmer",
+            "type": "duo",
+            "quantity": 5,
+            "points": 1,
+            "effect": "Used with Shark to steal a card",
+            "emoji": "🏊",
+            "color": "cyan",
+            "category": "Duo"
+        },
+        {
+            "name": "Shark",
+            "type": "duo",
+            "quantity": 5,
+            "points": 1,
+            "effect": "Steal 1 card from an opponent (with Swimmer)",
+            "emoji": "🦈",
+            "color": "gray",
+            "category": "Duo"
+        },
+        {
+            "name": "Shell",
+            "type": "collector",
+            "quantity": 6,
+            "points": "variable",
+            "effect": "Score increases with more Shells collected",
+            "emoji": "🐚",
+            "color": "white",
+            "category": "Collector"
+        },
+        {
+            "name": "Octopus",
+            "type": "collector",
+            "quantity": 5,
+            "points": "variable",
+            "effect": "Score increases with more Octopuses collected",
+            "emoji": "🐙",
+            "color": "purple",
+            "category": "Collector"
+        },
+        {
+            "name": "Penguin",
+            "type": "collector",
+            "quantity": 3,
+            "points": "variable",
+            "effect": "Score increases with more Penguins collected",
+            "emoji": "🐧",
+            "color": "black-white",
+            "category": "Collector"
+        },
+        {
+            "name": "Sailor",
+            "type": "collector",
+            "quantity": 2,
+            "points": "variable",
+            "effect": "Score increases with more Sailors collected",
+            "emoji": "🧭",
+            "color": "navy",
+            "category": "Collector"
+        },
+        {
+            "name": "Mermaid",
+            "type": "special",
+            "quantity": 4,
+            "points": "high",
+            "effect": "Powerful scoring; all 4 = instant win",
+            "emoji": "🧜‍♀️",
+            "color": "white",
+            "category": "Special"
+        },
+        {
+            "name": "Lighthouse",
+            "type": "multiplier",
+            "quantity": 1,
+            "points": "1 per Boat",
+            "effect": "Scores 1 point for each Boat card you have",
+            "emoji": "🏠💡",
+            "color": "yellow",
+            "category": "Multiplier"
+        },
+        {
+            "name": "Shoal of Fish",
+            "type": "special",
+            "quantity": 1,
+            "points": "special",
+            "effect": "Special shoal scoring",
+            "emoji": "🐠🐟",
+            "color": "blue",
+            "category": "Special"
+        },
+        {
+            "name": "Penguin Colony",
+            "type": "special",
+            "quantity": 1,
+            "points": "special",
+            "effect": "Bonus for Penguin cards",
+            "emoji": "🐧🐧🐧",
+            "color": "black-white",
+            "category": "Special"
+        },
+        {
+            "name": "Captain",
+            "type": "multiplier",
+            "quantity": 1,
+            "points": "1 per Sailor",
+            "effect": "Scores bonus points per Sailor",
+            "emoji": "👨‍✈️",
+            "color": "navy",
+            "category": "Multiplier"
+        }
+    ],
+    "colorCards": [
+        {
+            "color": "Dark Blue",
+            "quantity": 9,
+            "points": 1,
+            "emoji": "🌊"
+        },
+        {
+            "color": "Turquoise",
+            "quantity": 9,
+            "points": 1,
+            "emoji": "🟦"
+        },
+        {
+            "color": "Yellow",
+            "quantity": 8,
+            "points": 1,
+            "emoji": "🟨"
+        },
+        {
+            "color": "Black",
+            "quantity": 8,
+            "points": 1,
+            "emoji": "⬛"
+        },
+        {
+            "color": "Green",
+            "quantity": 6,
+            "points": 1,
+            "emoji": "🟩"
+        },
+        {
+            "color": "Gray",
+            "quantity": 4,
+            "points": 1,
+            "emoji": "⚪"
+        },
+        {
+            "color": "Lavender",
+            "quantity": 4,
+            "points": 1,
+            "emoji": "💜"
+        },
+        {
+            "color": "Pink",
+            "quantity": 2,
+            "points": 1,
+            "emoji": "🩷"
+        },
+        {
+            "color": "Peach",
+            "quantity": 2,
+            "points": 1,
+            "emoji": "🧡"
+        },
+        {
+            "color": "Orange",
+            "quantity": 1,
+            "points": 1,
+            "emoji": "🟧"
+        },
+        {
+            "color": "Tan",
+            "quantity": 1,
+            "points": 1,
+            "emoji": "🏖️"
+        }
+    ]
+}

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sea Salt & Paper - Origami Card Game</title>
+  <!-- Google Fonts Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- QR Code generator library Qrious -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <!-- Custom Style Sheets -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Main Container -->
+  <main class="app-container">
+
+    <!-- 1. Connection / Login Screen -->
+    <section id="screen-login" class="screen active">
+      <div class="card glass-card title-card">
+        <h1 class="logo-text">Sea Salt <span class="accent-text">& Paper</span></h1>
+        <p class="subtitle-text">The origami sea-themed multiplayer card game</p>
+        
+        <div class="input-group">
+          <label for="input-nickname">Your Sailor Name</label>
+          <input type="text" id="input-nickname" placeholder="Enter nickname..." maxlength="15">
+        </div>
+
+        <div class="avatar-selection">
+          <label>Choose Your Emoji Mascot</label>
+          <div class="avatar-grid">
+            <span class="avatar-option selected" data-avatar="🐙">🐙</span>
+            <span class="avatar-option" data-avatar="🦀">🦀</span>
+            <span class="avatar-option" data-avatar="🦈">🦈</span>
+            <span class="avatar-option" data-avatar="🐳">🐳</span>
+            <span class="avatar-option" data-avatar="🧜‍♀️">🧜‍♀️</span>
+            <span class="avatar-option" data-avatar="⛵">⛵</span>
+            <span class="avatar-option" data-avatar="🐧">🐧</span>
+            <span class="avatar-option" data-avatar="🐚">🐚</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="btn-create-room" class="btn btn-primary">Create Room</button>
+          <div class="divider"><span>OR</span></div>
+          <div class="join-action">
+            <input type="text" id="input-room-code" placeholder="Enter 4-letter Code..." maxlength="4" style="text-transform: uppercase;">
+            <button id="btn-join-room" class="btn btn-secondary">Join Room</button>
+          </div>
+        </div>
+
+        <div class="rules-trigger-wrapper">
+          <button class="btn btn-text" onclick="toggleRulesModal()">📖 How to Play & Card Rules</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Lobby Screen -->
+    <section id="screen-lobby" class="screen">
+      <div class="card glass-card lobby-card">
+        <h2>Game Lobby <span id="lobby-room-code" class="room-code-tag">----</span></h2>
+        
+        <!-- Room connection instructions -->
+        <div class="connection-instructions">
+          <div class="connection-details">
+            <p>Tell your friends to join on the same Wi-Fi by going to:</p>
+            <p id="lobby-url" class="ip-url-text">http://192.168.1.52:3000</p>
+          </div>
+          <div class="qr-wrapper">
+            <canvas id="lobby-qr"></canvas>
+          </div>
+        </div>
+
+        <div class="lobby-players-section">
+          <h3>Players Connected (<span id="lobby-players-count">0</span>/4)</h3>
+          <div id="lobby-players-list" class="players-grid">
+            <!-- Populated via Javascript -->
+          </div>
+        </div>
+
+        <div class="lobby-actions">
+          <button id="btn-ready-toggle" class="btn btn-primary btn-large">Ready to Dive</button>
+          <button id="btn-lobby-exit" class="btn btn-danger">Exit Room</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Active Game Screen -->
+    <section id="screen-game" class="screen">
+      <div class="game-layout">
+        
+        <!-- TOP: Opponents & Stats info -->
+        <div class="game-header">
+          <div class="room-stats">
+            <span class="header-room-code">Room: <strong id="game-room-code-display">----</strong></span>
+            <span class="header-target-score">Target: <strong id="game-target-score">35</strong> pts</span>
+            <button id="btn-toggle-log" class="btn btn-icon">📜 Logs</button>
+            <button class="btn btn-icon" onclick="toggleRulesModal()">📖 Rules</button>
+          </div>
+          
+          <div class="active-turn-banner" id="turn-banner">
+            <!-- Active player turn message -->
+          </div>
+
+          <div id="opponents-panel" class="opponents-row">
+            <!-- Display list of opponents cards, hand count, played tableau -->
+          </div>
+        </div>
+
+        <!-- CENTER: Draw and Discard board -->
+        <div class="game-board">
+          
+          <!-- Draw Deck Section -->
+          <div class="board-pile draw-deck-wrapper">
+            <div class="card-pile-label">DECK</div>
+            <div id="draw-deck" class="card-deck">
+              <div class="card-back">
+                <span class="deck-origami-symbol">🌊</span>
+                <span class="deck-count-badge" id="deck-count">58</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Discard Piles -->
+          <div class="discard-piles-wrapper">
+            <div class="discard-pile-container">
+              <div class="card-pile-label">PILE 1</div>
+              <div id="discard-pile-0" class="discard-pile empty" data-index="0">
+                <!-- Top card of pile 1 -->
+                <span class="empty-text">Empty</span>
+              </div>
+              <div class="pile-size-label" id="pile-0-size">0 cards</div>
+            </div>
+
+            <div class="discard-pile-container">
+              <div class="card-pile-label">PILE 2</div>
+              <div id="discard-pile-1" class="discard-pile empty" data-index="1">
+                <!-- Top card of pile 2 -->
+                <span class="empty-text">Empty</span>
+              </div>
+              <div class="pile-size-label" id="pile-1-size">0 cards</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- LOWER MIDDLE: Played Cards (Tableau) of Active Player -->
+        <div class="player-tableau-section">
+          <h4>Your Played Duo Cards (Protected Sets)</h4>
+          <div id="player-tableau" class="tableau-cards-row">
+            <!-- Played duos will appear face-up here -->
+            <span class="empty-notice">No pairs played this round yet.</span>
+          </div>
+        </div>
+
+        <!-- BOTTOM: Hand cards and Turn Controls -->
+        <div class="player-controls-panel">
+          
+          <!-- Selected Pair Controls (only shown when cards are selected) -->
+          <div class="action-control-bar" id="action-control-bar">
+            <span id="selection-status-text">Select a matching pair to play...</span>
+            <div class="action-buttons-group">
+              <button id="btn-play-duo" class="btn btn-success" disabled>Play Selected Pair</button>
+            </div>
+          </div>
+
+          <!-- Active hand wrapper -->
+          <div class="player-hand-container">
+            <div class="hand-header">
+              <span>Your Hand (<span id="hand-count">0</span> cards)</span>
+              <span id="hand-points-preview" class="points-badge">0 pts</span>
+            </div>
+            <div id="player-hand" class="cards-hand-row">
+              <!-- Active cards in hand -->
+            </div>
+          </div>
+
+          <!-- Turn Ending actions -->
+          <div class="turn-controls" id="turn-controls-bar">
+            <button id="btn-end-turn" class="btn btn-primary" disabled>End Turn</button>
+            <div class="declare-buttons">
+              <button id="btn-call-stop" class="btn btn-warning" disabled>Call STOP</button>
+              <button id="btn-call-last-chance" class="btn btn-danger" disabled>Call LAST CHANCE</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 4. MODAL: Event / Actions log Sidebar -->
+  <div id="modal-log" class="modal-sidebar">
+    <div class="modal-sidebar-header">
+      <h3>Table Action Log</h3>
+      <button class="btn-close" id="btn-close-log">×</button>
+    </div>
+    <div class="modal-sidebar-body" id="actions-log-container">
+      <!-- Populate log list -->
+    </div>
+  </div>
+
+  <!-- 5. MODAL: Crab Discard Pile Selector -->
+  <div id="modal-crab-picker" class="modal-overlay">
+    <div class="modal-content glass-card card-picker-modal">
+      <h2>Crab Effect: Choose a Card</h2>
+      <p>Choose one card from either discard pile to add to your hand.</p>
+      
+      <div class="crab-selection-tabs">
+        <button class="tab-button active" id="tab-pile-1">Discard Pile 1</button>
+        <button class="tab-button" id="tab-pile-2">Discard Pile 2</button>
+      </div>
+
+      <div class="crab-scrollable-picker">
+        <div id="crab-cards-grid" class="cards-grid-row">
+          <!-- Discard cards list populated dynamically -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-crab" style="display:none;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. MODAL: Draw 2 Choose 1 Selector -->
+  <div id="modal-draw-picker" class="modal-overlay">
+    <div class="modal-content glass-card draw-picker-modal">
+      <h2>Drawn Cards Choice</h2>
+      <p>Pick one card to keep. The other will be placed on top of your chosen discard pile.</p>
+      
+      <div class="draw-options-row">
+        <div class="draw-option-card-wrapper">
+          <div id="draw-card-0" class="draw-choice-card">Card 0</div>
+          <button id="btn-keep-0" class="btn btn-primary">Keep This Card</button>
+        </div>
+        <div class="draw-option-card-wrapper">
+          <div id="draw-card-1" class="draw-choice-card">Card 1</div>
+          <button id="btn-keep-1" class="btn btn-primary">Keep This Card</button>
+        </div>
+      </div>
+
+      <div id="draw-discard-pile-selection" class="discard-pile-choice" style="display:none;">
+        <h3>Select pile to discard the other card onto:</h3>
+        <div class="pile-buttons-row">
+          <button class="btn btn-secondary" id="btn-discard-pile-0">Pile 1</button>
+          <button class="btn btn-secondary" id="btn-discard-pile-1">Pile 2</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. MODAL: Steal Target Selector (Shark Duo) -->
+  <div id="modal-steal-picker" class="modal-overlay">
+    <div class="modal-content glass-card steal-picker-modal">
+      <h2>Shark Duo: Steal a Card</h2>
+      <p>Select which opponent you want to steal a random hand card from.</p>
+      <div id="steal-opponents-list" class="opponents-list-steal">
+        <!-- List of buttons of players -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. MODAL: Round Scores Overlay -->
+  <div id="modal-scores" class="modal-overlay">
+    <div class="modal-content glass-card scores-modal">
+      <h2 id="scores-title">Round Scoring Breakdown</h2>
+      
+      <div class="scores-table-wrapper">
+        <table class="scores-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Duos (1pt/pair)</th>
+              <th>Sets (Shell/Octopus...)</th>
+              <th>Multipliers (Lighthouse...)</th>
+              <th>Mermaids</th>
+              <th>Color Bonus</th>
+              <th>Round Score</th>
+              <th>Total Match Score</th>
+            </tr>
+          </thead>
+          <tbody id="scores-table-body">
+            <!-- Row updates -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scores-footer">
+        <button id="btn-scores-ready" class="btn btn-primary btn-large">Ready for Next Round</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. MODAL: Rules and Card Reference Guide -->
+  <div id="modal-rules" class="modal-overlay">
+    <div class="modal-content glass-card rules-modal">
+      <div class="modal-rules-header">
+        <h2>Sea Salt & Paper Reference Guide</h2>
+        <button class="btn-close" onclick="toggleRulesModal()">×</button>
+      </div>
+      <div class="rules-scrollable-body">
+        
+        <h3>Turn Options</h3>
+        <p>On your turn, you must perform **one** of:</p>
+        <ul>
+          <li><strong>Draw 2, Keep 1</strong>: Draw the top two cards of the deck. Keep one, and discard the other onto one of the two discard piles.</li>
+          <li><strong>Take top Discard</strong>: Take the top face-up card from either discard pile into your hand.</li>
+        </ul>
+        <p>Then, you may play pairs of Duo cards to trigger their effects, and optionally call to end the round if you have at least 7 points.</p>
+
+        <h3>Duo Cards (1 Point per Pair)</h3>
+        <div class="rules-card-grid">
+          <div class="rules-ref-item">
+            <strong>🦀 + 🦀 Crab Duo</strong>
+            <p>Effect: Search either discard pile and add one card of your choice to your hand.</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>⛵ + ⛵ Boat Duo</strong>
+            <p>Effect: Take an extra turn immediately.</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🐟 + 🐟 Fish Duo</strong>
+            <p>Effect: Draw the top card from the deck directly to your hand.</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🦈 + 🏊 Shark + Swimmer Duo</strong>
+            <p>Effect: Steal one random card from an opponent's hand.</p>
+          </div>
+        </div>
+
+        <h3>Collector Cards (Set Scoring)</h3>
+        <div class="rules-card-grid">
+          <div class="rules-ref-item">
+            <strong>🐙 Octopus Set</strong>
+            <p>1 Card: 0 pts | 2: 3 pts | 3: 6 pts | 4: 9 pts | 5: 12 pts</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🐚 Shell Set</strong>
+            <p>1 Card: 0 pts | 2: 2 pts | 3: 4 pts | 4: 6 pts | 5: 8 pts | 6: 10 pts</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🐧 Penguin Set</strong>
+            <p>1 Card: 1 pt | 2: 3 pts | 3: 5 pts</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🧭 Sailor Set</strong>
+            <p>1 Card: 0 pts | 2: 5 pts</p>
+          </div>
+        </div>
+
+        <h3>Point Multipliers</h3>
+        <div class="rules-card-grid">
+          <div class="rules-ref-item">
+            <strong>🏠💡 Lighthouse</strong>
+            <p>Scores +1 point for each Boat card you hold at round end.</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🐠🐟 Shoal of Fish</strong>
+            <p>Scores +1 point for each Fish card you hold at round end.</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>🐧🐧🐧 Penguin Colony</strong>
+            <p>Scores +2 points for each Penguin card you hold at round end.</p>
+          </div>
+          <div class="rules-ref-item">
+            <strong>👨‍✈️ Captain</strong>
+            <p>Scores +3 points for each Sailor card you hold at round end.</p>
+          </div>
+        </div>
+
+        <h3>Special: Mermaid Card (🧜‍♀️)</h3>
+        <ul>
+          <li>Scoring: Grants 1 point per card of your most frequent color. If you hold multiple Mermaids, they apply to your next largest color sets respectively.</li>
+          <li><strong>Four Mermaid Win:</strong> If you collect all 4 Mermaid cards, you win the entire match immediately!</li>
+        </ul>
+
+        <h3>STOP vs. LAST CHANCE</h3>
+        <ul>
+          <li><strong>STOP</strong>: Round ends instantly. All players score their card points.</li>
+          <li><strong>LAST CHANCE</strong>: Opponents get one final turn. If the caller holds the highest (or tied highest) score, they score card points + color bonus (1pt per card of largest color set), and opponents score ONLY color bonus. If the caller loses, opponents score cards, and the caller scores ONLY color bonus.</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.io client script -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Client javascript logic -->
+  <script src="js/client.js"></script>
+</body>
+</html>

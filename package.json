@@ -1,0 +1,27 @@
+{
+  "name": "seasalt-paper",
+  "version": "1.0.0",
+  "description": "Multiplayer web application for the Sea Salt & Paper card game.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "boardgame",
+    "multiplayer",
+    "cards",
+    "express",
+    "socket.io"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.3"
+  }
+}
