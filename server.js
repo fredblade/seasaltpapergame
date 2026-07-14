@@ -39,6 +39,8 @@ app.get('/api/cards', (req, res) => {
   res.json(loadCardsData());
 });
 
+
+
 // Fetch local IP address for networking
 function getLocalIp() {
   const interfaces = os.networkInterfaces();
@@ -147,6 +149,12 @@ const DECK = [
   { id: 'cr8', name: 'Crab', type: 'duo', color: 'Orange', emoji: '🦀', symbol: 'O' },
   { id: 'cr9', name: 'Crab', type: 'duo', color: 'Tan', emoji: '🦀', symbol: 'Ta' }
 ];
+
+// Expose the full deck for the cards reference page
+app.get('/api/deck', (req, res) => {
+  res.json(DECK);
+});
+
 
 const rooms = {};
 
