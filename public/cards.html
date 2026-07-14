@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sea Salt & Paper Cards</title>
+  <style>
+    :root {
+      --bg-start: #e9f7ff;
+      --bg-end: #fff4dc;
+      --panel: rgba(255, 255, 255, 0.9);
+      --ink: #0e2233;
+      --muted: #4c6175;
+      --accent: #1f7a8c;
+      --accent-2: #ff8a5b;
+      --line: #d7e5ee;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: radial-gradient(circle at 10% 10%, var(--bg-start), transparent 60%),
+                  radial-gradient(circle at 90% 90%, #ffe9d2, transparent 55%),
+                  linear-gradient(135deg, #f7fcff, var(--bg-end));
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(14, 34, 51, 0.08);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      letter-spacing: 0.3px;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .badge-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: #f0f8ff;
+      border: 1px solid #cfe7f5;
+      color: #0f4a63;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      padding: 14px;
+    }
+
+    .mini-card {
+      background: linear-gradient(160deg, #ffffff, #f7fbff 62%);
+      border: 1px solid #dcebf3;
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 16px rgba(14, 34, 51, 0.06);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px rgba(14, 34, 51, 0.1);
+    }
+
+    .mini-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .mini-emoji {
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .mini-qty {
+      background: #e8f7ff;
+      border: 1px solid #c6e7f4;
+      color: #12556b;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .mini-name {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .mini-meta {
+      margin: 2px 0 8px;
+      color: #4f6376;
+      font-size: 0.82rem;
+    }
+
+    .mini-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 0 0 8px;
+    }
+
+    .mini-tag {
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border: 1px solid #d8e8f2;
+      background: #f4fbff;
+      color: #1d4d63;
+    }
+
+    .mini-points {
+      margin: 0 0 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #0f4a63;
+    }
+
+    .mini-effect {
+      margin: 0 0 6px;
+      color: #30495d;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .mini-help {
+      margin: 0;
+      color: #2d4f64;
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+
+    .quick-help {
+      margin-top: 14px;
+      display: grid;
+      gap: 6px;
+      color: #24465a;
+      font-size: 0.9rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(14, 34, 51, 0.06);
+    }
+
+    .panel h2 {
+      margin: 0;
+      padding: 14px 16px;
+      font-size: 1.1rem;
+      background: linear-gradient(90deg, #eff9ff, #fff6e7);
+      border-bottom: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e8eff4;
+      vertical-align: top;
+    }
+
+    th {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #4f6170;
+      background: #f8fcff;
+    }
+
+    tbody tr:hover {
+      background: #fafcff;
+    }
+
+    .emoji {
+      font-size: 1.2rem;
+    }
+
+    .error {
+      margin-top: 14px;
+      color: #b00020;
+      font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      th:nth-child(4),
+      td:nth-child(4),
+      th:nth-child(7),
+      td:nth-child(7) {
+        display: none;
+      }
+
+      .wrap {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1 id="title">Cards</h1>
+      <p class="sub">All cards available in the current Sea Salt and Paper data set.</p>
+      <div class="badge-row" id="summary"></div>
+      <div class="quick-help">
+        <div><strong>Pairs:</strong> match 2 of the same duo card (or Shark + Swimmer) to play a duo.</div>
+        <div><strong>Collectors:</strong> more copies in a set means more points.</div>
+        <div><strong>Color bonus:</strong> your biggest single-color group matters at round end.</div>
+      </div>
+      <p class="error" id="error" hidden></p>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>Main Cards Gallery</h2>
+        <div class="cards-grid" id="main-cards-grid"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Color Cards Gallery</h2>
+        <div class="cards-grid" id="color-cards-grid"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Main Cards</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Emoji</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Qty</th>
+              <th>Points</th>
+              <th>Effect</th>
+            </tr>
+          </thead>
+          <tbody id="main-cards-body"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Color Cards</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Emoji</th>
+              <th>Color</th>
+              <th>Qty</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody id="color-cards-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    async function loadCardsPage() {
+      const title = document.getElementById('title');
+      const summary = document.getElementById('summary');
+      const errorBox = document.getElementById('error');
+      const mainBody = document.getElementById('main-cards-body');
+      const colorBody = document.getElementById('color-cards-body');
+      const mainGrid = document.getElementById('main-cards-grid');
+      const colorGrid = document.getElementById('color-cards-grid');
+
+      const collectorScoreGuides = {
+        Shell: '2->2, 3->4, 4->6, 5->8, 6->10',
+        Octopus: '2->3, 3->6, 4->9, 5->12',
+        Penguin: '1->1, 2->3, 3->5',
+        Sailor: '2->5'
+      };
+
+      function getCardTips(card) {
+        const tags = [];
+        let usage = 'Use based on standard card rules.';
+        let scoring = 'Points: ' + (card.points ?? '-');
+
+        if (card.type === 'duo') {
+          tags.push('Pair Card');
+          usage = card.name === 'Shark' || card.name === 'Swimmer'
+            ? 'Play as Shark + Swimmer to steal 1 random card from an opponent hand.'
+            : 'Play 2 matching ' + card.name + ' cards as a pair to trigger its effect.';
+          scoring = 'Each completed duo pair is worth 1 point.';
+        }
+
+        if (card.type === 'collector') {
+          tags.push('Collection Card');
+          usage = 'Keep collecting the same card name to grow this set.';
+          scoring = collectorScoreGuides[card.name]
+            ? 'Points ladder: ' + collectorScoreGuides[card.name]
+            : 'Collection scoring depends on how many you collect.';
+        }
+
+        if (card.type === 'multiplier') {
+          tags.push('Bonus Card');
+          usage = 'This card boosts points from related cards in your hand/tableau.';
+          scoring = 'Multiplier: ' + (card.points ?? '-');
+        }
+
+        if (card.name === 'Mermaid') {
+          tags.push('High Value');
+          usage = 'Mermaids score from your largest color groups.';
+          scoring = 'Collect all 4 Mermaids for an instant win.';
+        }
+
+        if (card.name === 'Shoal of Fish' || card.name === 'Penguin Colony') {
+          tags.push('Special Bonus');
+        }
+
+        if (tags.length === 0) {
+          tags.push('Utility');
+        }
+
+        return { tags, usage, scoring };
+      }
+
+      try {
+        const response = await fetch('/api/cards');
+        if (!response.ok) {
+          throw new Error('Failed to fetch cards data.');
+        }
+
+        const data = await response.json();
+        title.textContent = (data.game || 'Cards') + ' - Card List';
+
+        const mainCards = Array.isArray(data.cards) ? data.cards : [];
+        const colorCards = Array.isArray(data.colorCards) ? data.colorCards : [];
+
+        summary.innerHTML = '';
+        const chips = [
+          'Total Cards: ' + (data.totalCards ?? '-'),
+          'Main Cards: ' + mainCards.length,
+          'Color Cards: ' + colorCards.length
+        ];
+        chips.forEach(text => {
+          const el = document.createElement('span');
+          el.className = 'badge';
+          el.textContent = text;
+          summary.appendChild(el);
+        });
+
+        mainBody.innerHTML = '';
+        mainGrid.innerHTML = '';
+        mainCards.forEach(card => {
+          const tips = getCardTips(card);
+
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="emoji">${card.emoji || ''}</td>
+            <td>${card.name || ''}</td>
+            <td>${card.type || ''}</td>
+            <td>${card.category || ''}</td>
+            <td>${card.quantity ?? ''}</td>
+            <td>${card.points ?? ''}</td>
+            <td>${card.effect || ''}</td>
+          `;
+          mainBody.appendChild(row);
+
+          const tile = document.createElement('article');
+          tile.className = 'mini-card';
+          tile.innerHTML = `
+            <div class="mini-top">
+              <span class="mini-emoji">${card.emoji || ''}</span>
+              <span class="mini-qty">x${card.quantity ?? '-'}</span>
+            </div>
+            <p class="mini-name">${card.name || ''}</p>
+            <p class="mini-meta">${card.type || ''} / ${card.category || ''}</p>
+            <div class="mini-tags">${tips.tags.map(tag => `<span class="mini-tag">${tag}</span>`).join('')}</div>
+            <p class="mini-points">${tips.scoring}</p>
+            <p class="mini-effect">${card.effect || ''}</p>
+            <p class="mini-help">${tips.usage}</p>
+          `;
+          mainGrid.appendChild(tile);
+        });
+
+        colorBody.innerHTML = '';
+        colorGrid.innerHTML = '';
+        colorCards.forEach(card => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="emoji">${card.emoji || ''}</td>
+            <td>${card.color || ''}</td>
+            <td>${card.quantity ?? ''}</td>
+            <td>${card.points ?? ''}</td>
+          `;
+          colorBody.appendChild(row);
+
+          const tile = document.createElement('article');
+          tile.className = 'mini-card';
+          tile.innerHTML = `
+            <div class="mini-top">
+              <span class="mini-emoji">${card.emoji || ''}</span>
+              <span class="mini-qty">x${card.quantity ?? '-'}</span>
+            </div>
+            <p class="mini-name">${card.color || ''}</p>
+            <p class="mini-meta">Color Card / Base Point</p>
+            <div class="mini-tags"><span class="mini-tag">Color Bonus</span></div>
+            <p class="mini-points">Points: ${card.points ?? '-'}</p>
+            <p class="mini-effect">Counts toward your largest single-color group.</p>
+            <p class="mini-help">At round end, your biggest color group size is your color bonus value.</p>
+          `;
+          colorGrid.appendChild(tile);
+        });
+      } catch (error) {
+        errorBox.hidden = false;
+        errorBox.textContent = error.message || 'Could not load card data.';
+      }
+    }
+
+    loadCardsPage();
+  </script>
+</body>
+</html>

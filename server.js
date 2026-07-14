@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const os = require('os');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,9 +15,29 @@ const io = new Server(server, {
 });
 
 const PORT = process.env.PORT || 3000;
+const cardsJsonPath = path.join(__dirname, 'cards.json');
+
+function loadCardsData() {
+  try {
+    const raw = fs.readFileSync(cardsJsonPath, 'utf8');
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error('Failed to load cards.json:', error.message);
+    return { game: 'Sea Salt & Paper', totalCards: 0, cards: [], colorCards: [] };
+  }
+}
 
 // Serve static assets from public folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Cards explorer page and API
+app.get('/cards', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'cards.html'));
+});
+
+app.get('/api/cards', (req, res) => {
+  res.json(loadCardsData());
+});
 
 // Fetch local IP address for networking
 function getLocalIp() {
